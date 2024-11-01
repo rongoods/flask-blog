@@ -10,9 +10,7 @@ def load_posts():
         return json.load(file)
 
 
-def save_post(new_post):
-    posts = load_posts()
-    posts.append(new_post)
+def save_posts(posts):
     with open('blog_posts.json', 'w') as file:
         json.dump(posts, file, indent=4)
 
@@ -33,9 +31,20 @@ def add():
             "title": request.form['title'],
             "content": request.form['content']
         }
-        save_post(new_post)
+        save_posts(new_post)
         return redirect(url_for('index'))
     return render_template('add.html')
+
+
+@app.route('/delete/<int:post_id>')
+def delete(post_id):
+    posts = load_posts()
+    updated_posts = [post for post in posts if post['id'] != post_id]
+
+    if len(updated_posts) == len(posts):
+        return "Post not found", 404
+    save_posts(updated_posts)
+    return redirect(url_for('index'))
 
 
 if __name__ == '__main__':
