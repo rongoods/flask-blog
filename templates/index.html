@@ -18,6 +18,9 @@
                     <p>{{ post.content }}</p>
                     <a href="/delete/{{ post.id }}">Delete Post</a>
                     <a href="/update/{{ post.id }}">Update Post</a>
+                    <form action="{{ url_for('like', post_id=post.id) }}" method="POST" style="display:inline;">
+                        <button type="submit">Like</button>
+                    </form>
                 </div>
             </li>
         {% endfor %}
